@@ -3,6 +3,7 @@ const uuid = require('uuid').v4;
 const router = express.Router()
 
 const contacts = require('../../models/contacts')
+const userMiddlewares = require('../../middlewares/middlewares');
 
 router.get('/', async (req, res, next) => {
   
@@ -39,7 +40,7 @@ router.get('/:contactId', async (req, res, next) => {
 
 })
 
-router.post('/', async (req, res, next) => {
+router.route('/').post(userMiddlewares.checkUserData, async (req, res, next) => {
   const { name, email, phone } = req.query;
   console.log(req.query)
   const data = (await contacts.listContacts() === undefined) ? [] : await contacts.listContacts();
@@ -57,7 +58,22 @@ router.post('/', async (req, res, next) => {
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+   const { contactId } = req.params;
+    // const foundElement = await contacts.getContactById(contactId)
+    // if ( foundElement === undefined) {
+    //    return '';
+    // }
+    const data = await contacts.listContacts();
+    await contacts.saveFile(data.filter(el => el.id !== contactId));
+    const msg = `Element with ${contactId} id was deleted`.red;
+    res.json({
+    status: 'success',
+    code: 200,
+    
+    data: {
+      msg,
+    },
+  });
 })
 
 router.put('/:contactId', async (req, res, next) => {
