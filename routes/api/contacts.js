@@ -1,25 +1,21 @@
 const express = require('express')
-
+// const uuid = require('uuid').v4;
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contacts = require('../../controllers/useControllers')
+const userMiddlewares = require('../../middlewares/useMiddlewares');
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', contacts.getContacts);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:contactId', userMiddlewares.checkContactsId)
+router.get('/:contactId',contacts.getContactById )
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post('/', userMiddlewares.checkContactsData)
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post('/',contacts.addContact )
+
+router.delete('/:contactId',contacts.removeContact )
+
+router.put('/:contactId', contacts.updateContact)
 
 module.exports = router
