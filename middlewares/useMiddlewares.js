@@ -20,23 +20,25 @@ exports.checkContactsData = (req, res, next) => {
  */
 exports.checkContactsId = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { contactId } = req.params;
 
     // fetch user from DB
     const contacts = JSON.parse(await fs.readFile('./models/contacts.json'));
 
-    const contact = contacts.find((item) => item.id === id);
-
+    const contact = contacts.find((item) => item.id === contactId);
+    console.log(contactId);
     // if user exists => validation passed
     if (contact) return next();
 
     // if no contact with that id, sent 'not found' request
-    const error = new Error('No contact..');
+    const error = new Error('Not found');
 
     error.status = 404;
-
+   
     next(error);
+    
   } catch (err) {
+    console.log(err);
     // catch any unpredictable errors
     next(err);
   }

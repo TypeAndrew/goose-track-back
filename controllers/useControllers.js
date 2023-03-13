@@ -32,16 +32,16 @@ const getContacts = async (req, res, next) => {
 }
 
 const getContactById = async (req, res, next) => {
-  
+    console.log(next);
     const { contactId } = req.params;
     const data = await listContacts();
-    console.log(req);
+    
     const foundElement = await data.filter(el => el.id === contactId);
     if (  foundElement.length === 0) {
         console.log(`Element with ${contactId}  not found`.magenta);
     } 
      
-    
+  
     res.json({
     status: 'success',
     code: 200,
@@ -55,10 +55,7 @@ const getContactById = async (req, res, next) => {
 
 const removeContact = async (req, res, next) => {
    const { contactId } = req.params;
-    // const foundElement = await contacts.getContactById(contactId)
-    // if ( foundElement === undefined) {
-    //    return '';
-    // }
+ 
     const data = await listContacts();
     await saveFile(data.filter(el => el.id !== contactId));
     const msg = `Element with ${contactId} id was deleted`.red;
@@ -83,7 +80,7 @@ const addContact = async (req, res, next) => {
    
   res.json({
     status: 'success',
-    code: 200,
+    code: 201,
     data: {
       newdata,
     },
@@ -107,11 +104,8 @@ const updateContact = async (req, res, next) => {
         data[index].email = email === undefined ? data[index].email : email;
         data[index].phone = phone === undefined ? data[index].phone : phone;
         await saveFile(data);
-        // let msg = `contact ${contactId} is modified `;
-    } else {
-        // let msg = `contact ${contactId} not found `;
-    
     }
+  
     const msg = index >= 0 ? `contact ${contactId} is modified ` : `contact ${contactId} not found `;
     const code = index >= 0 ? 200 : 404;
     res.json({
