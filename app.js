@@ -1,10 +1,28 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+const express = require('express');
+const logger = require('morgan');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 
-const contactsRouter = require('./routes/api/contacts')
+// use environment variables (.env file)
+dotenv.config({ path: './.env' })
 
-const app = express()
+const contactsRouter = require('./routes/api/contacts');
+
+// initialize application
+const app = express();
+
+// use morgan logger in 'development' mode
+if (process.env.NODE_ENV === 'development') app.use(logger('dev'));
+
+// Mongo DB connection
+mongoose.connect(process.env.MONGO_URL).then((connection) => {
+    console.log(connection);
+    console.log('Mongo DB connected..');
+}).catch((err) => {
+    console.log(err);
+    process.exit(1);
+});
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
@@ -15,11 +33,11 @@ app.use(express.json())
 app.use('/api/contacts', contactsRouter)
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found 1' })
+    res.status(404).json({ message: 'Not found' })
 })
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
+    res.status(500).json({ message: err.message })
 })
 
 module.exports = app
