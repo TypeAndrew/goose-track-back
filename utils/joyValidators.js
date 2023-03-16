@@ -9,4 +9,5 @@ exports.createUserValidator = (data) => Joi.object({
     name: Joi.string().min(2).max(40).alphanum().required(),
     email: Joi.string().min(5).max(40).required(),
     phone: Joi.string().regex(regPhone).required(),
+    favorite: Joi.boolean(),
 }).validate(data);
