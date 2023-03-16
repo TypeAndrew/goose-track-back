@@ -1,11 +1,11 @@
-const { bool, boolean } = require('joi');
+// const { bool, boolean } = require('joi');
 const { model, Schema } = require('mongoose');
 
 const contactsSchema = new Schema({
 
     name: {
         type: String,
-        required: true,
+        required: [true, 'Set name for contact'],
         minlength: 2,
         maxlength: 40,
     },
