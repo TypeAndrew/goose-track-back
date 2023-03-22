@@ -1,4 +1,5 @@
 const { model, Schema } = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const usersSchema = new Schema({
     password: {
@@ -18,8 +19,23 @@ const usersSchema = new Schema({
     token: {
         type: String,
         default: null,
+
     },
 })
+
+// Pre save hook
+usersSchema.pre('save', async function(next) {
+    if (!this.isModified('password')) return next();
+
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    // const passwordIsValid = await bcrypt.compare('Pass&2234', hashedPassword);
+
+    next();
+});
+
+// Custom method
+usersSchema.methods.checkPassword = (candidate, hash) => bcrypt.compare(candidate, hash);
 
 const User = model('User', usersSchema);
 

@@ -1,6 +1,11 @@
+const jwt = require('jsonwebtoken');
 const { catchAsync } = require('../utils');
 
 const User = require('../models/usersModel');
+
+const signToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+});
 
 /**
  * Get contacts list 
@@ -20,20 +25,46 @@ const getUsers = catchAsync(async(req, res) => {
  */
 const registerUsers = catchAsync(async(req, res) => {
 
-    const { email, password, subscription } = req.body;
-    console.log('-------')
-    console.log(req)
+    const newUserData = {
+        ...req.body
+    };
+    console.log(newUserData);
+    const newUser = await User.create(newUserData);
 
-    const newUser = User.create({ email: email, password: password, subscription: subscription });
+    newUser.password = undefined;
 
-    console.log(`Element with ${email} ${password} ${subscription} was added`.green);
+    const token = signTo(newUser._id);
 
     res.status(201).json({
         newUser: newUser,
     });
 })
 
+const loginUsers = catchAsync(async(req, res) => {
+
+    const { email, password, subscription } = req.body;
+
+    const user = await User.findOne({ email: email }).select('+password');
+
+    if (!user) return next(new AppError(401, 'Not authorized'));
+
+    const passwordIsValid = await user.checkPassword(password, user.password);
+
+    if (!passwordIsValid) return next(new AppError(401, 'Not authorized'));
+
+    user.password = undefined;
+
+    const token = signToken(user.id);
+
+    res.status(201).json({
+
+        token,
+        user,
+    });
+})
+
 module.exports = {
     getUsers,
     registerUsers,
+    loginUsers,
 }

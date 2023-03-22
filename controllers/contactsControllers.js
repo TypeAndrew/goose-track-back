@@ -20,10 +20,10 @@ const getContacts = catchAsync(async(req, res) => {
  * Get contact by id 
  */
 const getContactById = catchAsync(async(req, res, err) => {
-    const contact =  req.body;
-    
+    const contact = req.body;
+
     res.status(200).json({
-        contact ,
+        contact,
     });
 
 
@@ -37,7 +37,7 @@ const addContact = catchAsync(async(req, res) => {
     const { name, email, phone, favorite } = req.body;
     console.log(req.body)
 
-    const newContact = Contact.create({ name: name, email: email, phone: phone, favorite: favorite });
+    const newContact = await Contact.create({ name: name, email: email, phone: phone, favorite: favorite });
 
     console.log(`Element with ${name} ${email} ${phone}id was added`.green);
 
@@ -66,7 +66,7 @@ const removeContact = catchAsync(async(req, res) => {
 const updateContact = async(req, res, next) => {
     const { contactId } = req.params;
     const { name, email, phone } = req.body;
-    
+
     const updContact = await Contact.findByIdAndUpdate(contactId, { name, email, phone }, { new: true });
 
     res.status(200).json({
