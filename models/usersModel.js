@@ -34,6 +34,7 @@ usersSchema.pre('save', async function(next) {
     next();
 });
 
+
 // Custom method
 usersSchema.methods.checkPassword = (candidate, hash) => bcrypt.compare(candidate, hash);
 

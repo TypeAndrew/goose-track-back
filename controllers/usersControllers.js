@@ -4,8 +4,10 @@ const { catchAsync } = require('../utils');
 const User = require('../models/usersModel');
 
 const signToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
+    expiresIn: process.env.JWT_EXPIRES_IN
 });
+
+const decodeToken = (tocken) => jwt.decode(tocken);
 
 /**
  * Get contacts list 
@@ -54,7 +56,9 @@ const loginUsers = catchAsync(async(req, res) => {
 
     user.password = undefined;
 
-    const token = signToken(user.id);
+    const token = (user.token === null) ? signToken(user._id) : user.token;
+
+    await User.findByIdAndUpdate(user._id, { token }, { new: true });
 
     res.status(201).json({
 

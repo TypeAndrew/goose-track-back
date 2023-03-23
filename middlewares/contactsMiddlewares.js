@@ -8,11 +8,11 @@ const ObjectId = require('mongodb').ObjectId;
 exports.checkContactsData = (req, res, next) => {
     // Check new user data.
     console.log(req.query);
-    
+
     const { error, value } = validators.createUserValidator(req.body);
-   
+
     if (error) return next(new AppError(400, error.details[0].message));
-    
+
     req.body = value;
 
     next();
@@ -24,26 +24,40 @@ exports.checkContactsData = (req, res, next) => {
 exports.checkContactsId = async(req, res, next) => {
     try {
         const { contactId } = req.params;
-      
+
         const contact = ObjectId.isValid(contactId) ? await Contact.findById({ _id: contactId }) : undefined;
-     
+
         if (contact) {
-            
+
             req.body = contact;
-            
+
             next();
         } else {
-        // if no contact with that id, sent 'not found' request
-        const error = new Error(`Contact with ${contactId} Not found`);
+            // if no contact with that id, sent 'not found' request
+            const error = new Error(`Contact with ${contactId} Not found`);
 
-        error.status = 404;
+            error.status = 404;
 
-        next(error);
-            
-        }    
+            next(error);
+
+        }
     } catch (err) {
         console.log(err);
         // catch any unpredictable errors
         next(err);
     }
+};
+
+/**
+ * Check new user data.
+ */
+exports.checkTokensData = (req, res, next) => {
+    // Check new user data.
+    console.log(req.query);
+
+    if (error) return next(new AppError(400, error.details[0].message));
+
+    req.body = value;
+
+    next();
 };
