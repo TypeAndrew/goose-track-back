@@ -2,6 +2,7 @@ const { AppError, validators } = require('../utils');
 const Contact = require('../models/contactsModel');
 const ObjectId = require('mongodb').ObjectId;
 
+
 /**
  * Check new user data.
  */
@@ -46,18 +47,4 @@ exports.checkContactsId = async(req, res, next) => {
         // catch any unpredictable errors
         next(err);
     }
-};
-
-/**
- * Check new user data.
- */
-exports.checkTokensData = (req, res, next) => {
-    // Check new user data.
-    console.log(req.query);
-
-    if (error) return next(new AppError(400, error.details[0].message));
-
-    req.body = value;
-
-    next();
 };
