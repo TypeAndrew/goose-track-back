@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { catchAsync } = require('../utils');
-
+// const { AppError } = require('../utils');
 const User = require('../models/usersModel');
 
 const signToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -35,35 +35,58 @@ const registerUsers = catchAsync(async(req, res) => {
 
     newUser.password = undefined;
 
-    const token = signTo(newUser._id);
+    // const token = signToken(newUser._id);
 
     res.status(201).json({
         newUser: newUser,
     });
 })
 
-const loginUsers = catchAsync(async(req, res) => {
+const loginUsers = catchAsync(async(req, res, next) => {
 
-    const { email, password, subscription } = req.body;
-
-    const user = await User.findOne({ email: email }).select('+password');
-
-    if (!user) return next(new AppError(401, 'Not authorized'));
-
-    const passwordIsValid = await user.checkPassword(password, user.password);
-
-    if (!passwordIsValid) return next(new AppError(401, 'Not authorized'));
-
-    user.password = undefined;
-
+    
+    const  user = req.body;
+    // user.password = undefined;
+    console.log(user);
     const token = (user.token === null) ? signToken(user._id) : user.token;
 
-    await User.findByIdAndUpdate(user._id, { token }, { new: true });
+    // const updatedUser = await User.findByIdAndUpdate(user._id, { token }, { new: true });
+    user.token = token;
+
+    const updatedUser = await user.save();
+
+    user.password = undefined;
 
     res.status(201).json({
 
         token,
-        user,
+        updatedUser,
+    });
+})
+
+const logOutUsers = catchAsync(async(req, res, next) => {
+
+    const  user = req.body;
+
+    user.token = null;
+
+    const updatedUser = await user.save();
+
+    user.password = undefined;
+
+    res.status(201).json({
+
+        updatedUser,
+    });
+})
+
+const currentUsers = catchAsync(async(req, res, next) => {
+
+    const  Authorization =  req.headers.authorization;
+
+    res.status(201).json({
+
+        Authorization,
     });
 })
 
@@ -71,4 +94,6 @@ module.exports = {
     getUsers,
     registerUsers,
     loginUsers,
+    logOutUsers,
+    currentUsers,
 }

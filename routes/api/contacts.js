@@ -1,33 +1,24 @@
 const express = require('express')
 const router = express.Router()
 
-const contacts = require('../../controllers/contactsControllers')
-const contactMiddlewares = require('../../middlewares/contactsMiddlewares');
-const userMiddlewares = require('../../middlewares/usersMiddlewares');
+const { getContacts, addContact, getContactById,
+        updateContact, removeContact, changeFavoriteById } = require('../../controllers/contactsControllers')
+const { checkContactsId, checkContactsData } = require('../../middlewares/contactsMiddlewares');
+const { checkTokensData } = require('../../middlewares/usersMiddlewares');
 
-router.get('/', userMiddlewares.checkTokensData);
-router.get('/', contacts.getContacts);
 
-router.get('/:contactId', userMiddlewares.checkTokensData);
-router.get('/:contactId', contactMiddlewares.checkContactsId)
-router.get('/:contactId', contacts.getContactById)
+router.route('/')
+    .get(checkTokensData, getContacts)
+    .post(checkTokensData, checkContactsData,addContact );
 
-router.post('/', userMiddlewares.checkTokensData)
-router.post('/', contactMiddlewares.checkContactsData)
-router.post('/', contacts.addContact)
+router.route('/:contactId')
+    .get(checkTokensData, checkContactsId,getContactById)
+    .put(checkTokensData, checkContactsId,updateContact )
+    .delete(checkTokensData, checkContactsId, removeContact)
+    .patch(checkTokensData, checkContactsId)
 
-router.delete('/:contactId', userMiddlewares.checkTokensData)
-router.delete('/:contactId', contactMiddlewares.checkContactsId)
-router.delete('/:contactId', contacts.removeContact)
+router.route('/:contactId/favorite')
+    .patch(checkTokensData,changeFavoriteById)
 
-router.put('/:contactId', userMiddlewares.checkTokensData)
-router.put('/:contactId', contactMiddlewares.checkContactsId)
-router.put('/:contactId', contacts.updateContact)
 
-router.patch('/:contactId', userMiddlewares.checkTokensData)
-router.patch('/:contactId', contactMiddlewares.checkContactsId)
-
-router.patch('/:contactId/favorite', userMiddlewares.checkTokensData)
-router.patch('/:contactId/favorite', contacts.changeFavoriteById)
-
-module.exports = router
+module.exports = router 
