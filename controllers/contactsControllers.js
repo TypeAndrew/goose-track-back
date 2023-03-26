@@ -8,12 +8,36 @@ const Contact = require('../models/contactsModel');
  */
 const getContacts = catchAsync(async(req, res) => {
 
-    const contacts = await Contact.find().sort({ name: -1 }).lean();
-
-    res.status(200).json({
-        contacts,
+    const { page, limit } = req.query;
+   
+    // const contactsQuery = await Contact.find().skip(skip).limit(limit); 
+    
+    const paginationPage = +page || 1;
+    const paginationLimit = +limit || 5;
+    const skip = (paginationPage - 1) * paginationLimit;
+    
+    // const todos = await Todo.find().skip(skip).limit(paginationLimit);
+    console.log('-' + skip + " " + paginationLimit);
+   // console.log(contactsQuery);
+    try {
+        // const findOptions = "";
+        const contactsQuery = await Contact.find().skip(skip).limit(paginationLimit);
+        const count = await Contact.count();
+         res.status(200).json({
+        count,
+        contactsQuery,
     }, );
 
+        }
+    catch(err) {
+        console.log(err);
+    }
+
+    console.log('-----------------------------');
+    // const contacts = await contactsQuery;
+    
+
+   
 })
 
 /**
