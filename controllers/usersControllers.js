@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { catchAsync } = require('../utils');
+const gravatar = require('gravatar');
 // const { AppError } = require('../utils');
 const User = require('../models/usersModel');
 
@@ -30,11 +31,16 @@ const registerUsers = catchAsync(async(req, res) => {
     const newUserData = {
         ...req.body
     };
+    newUserData.avatarURL = gravatar.url(newUserData.email);
     console.log(newUserData);
-    const newUser = await User.create(newUserData);
 
+    const newUser = await User.create(newUserData);
+    console.log('----------');
     newUser.password = undefined;
 
+    console.log(newUser);
+    // next();
+    newUser.save();
     // const token = signToken(newUser._id);
 
     res.status(201).json({
@@ -44,8 +50,8 @@ const registerUsers = catchAsync(async(req, res) => {
 
 const loginUsers = catchAsync(async(req, res, next) => {
 
-    
-    const  user = req.body;
+
+    const user = req.body;
     // user.password = undefined;
     console.log(user);
     const token = (user.token === null) ? signToken(user._id) : user.token;
@@ -66,7 +72,7 @@ const loginUsers = catchAsync(async(req, res, next) => {
 
 const logOutUsers = catchAsync(async(req, res, next) => {
 
-    const  user = req.body;
+    const user = req.body;
 
     user.token = null;
 
@@ -82,7 +88,7 @@ const logOutUsers = catchAsync(async(req, res, next) => {
 
 const currentUsers = catchAsync(async(req, res, next) => {
 
-    const  Authorization =  req.headers.authorization;
+    const Authorization = req.headers.authorization;
 
     res.status(201).json({
 

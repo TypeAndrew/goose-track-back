@@ -21,6 +21,9 @@ const usersSchema = new Schema({
         default: null,
 
     },
+    avatarurl: {
+        tepe: String,
+    },
 })
 
 // Pre save hook

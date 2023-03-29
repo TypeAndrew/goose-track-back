@@ -31,6 +31,9 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
+// serv statics files
+app.use(express.static('public'))
+
 app.use('/api/contacts', contactsRouter)
 app.use('/api/users', usersRouter)
 
