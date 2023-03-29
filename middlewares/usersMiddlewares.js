@@ -2,6 +2,7 @@ const User = require('../models/usersModel');
 const jwt = require('jsonwebtoken');
 const { catchAsync, AppError } = require('../utils');
 const decodeToken = (tocken, secret) => jwt.verify(tocken, secret);
+const ImageService = require('../services/imageService');
 
 /**
  * Check token data.
@@ -47,3 +48,5 @@ exports.checkUserData = catchAsync(async(req, res, next) => {
 
     next();
 });
+
+exports.uploadUserPhoto = ImageService.upload('avatar');

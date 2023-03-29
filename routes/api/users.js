@@ -17,4 +17,7 @@ router.post('/logout', usersControllers.logOutUsers);
 router.post('/current', usersMiddlewares.checkTokensData);
 router.post('/current', usersControllers.currentUsers);
 
+router.patch('/avatars', usersMiddlewares.uploadUserPhoto);
+router.patch('/avatars', usersControllers.updateUsersAvatars);
+
 module.exports = router

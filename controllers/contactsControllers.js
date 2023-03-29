@@ -8,36 +8,47 @@ const Contact = require('../models/contactsModel');
  */
 const getContacts = catchAsync(async(req, res) => {
 
-    const { page, limit } = req.query;
-   
-    // const contactsQuery = await Contact.find().skip(skip).limit(limit); 
-    
-    const paginationPage = +page || 1;
-    const paginationLimit = +limit || 5;
-    const skip = (paginationPage - 1) * paginationLimit;
-    
-    // const todos = await Todo.find().skip(skip).limit(paginationLimit);
-    console.log('-' + skip + " " + paginationLimit);
-   // console.log(contactsQuery);
-    try {
-        // const findOptions = "";
-        const contactsQuery = await Contact.find().skip(skip).limit(paginationLimit);
-        const count = await Contact.count();
-         res.status(200).json({
-        count,
-        contactsQuery,
-    }, );
+     const { limit, page, sort, order, search } = req.query;
 
-        }
-    catch(err) {
-        console.log(err);
-    }
+  // define search options ==================
+  const findOptions = search
+    ? { $or: [{ name: { $regex: search, $options: 'i' } }, { email: { $regex: search, $options: 'i' } }] }
+    : {};
 
-    console.log('-----------------------------');
-    // const contacts = await contactsQuery;
-    
 
-   
+  // init datebase query =================
+  const contactsQuery = Contact.find(findOptions);
+
+  // sorting =======================
+  // order = 'ASC' | 'DESC';
+  // .sort('-title') | .sort('desc');
+  // const todos = await Todo.find().sort(`${order === 'DESC' ? '-' : ''}${sort}`);
+  contactsQuery.sort(`${order === 'DESC' ? '-' : ''}${sort}`);
+
+  // pagination =========================
+  // limit = 5
+  // page 1 => skip 0;
+  // page 2 => skip 5;
+  // page 3 => skip 10;
+  const paginationPage = +page || 1;
+  const paginationLimit = +limit || 5;
+  const skip = (paginationPage - 1) * paginationLimit;
+  // const todos = await Todo.find().skip(skip).limit(paginationLimit);
+    console.log(''+skip+" "+ paginationLimit)
+    console.log('--------------------');
+  contactsQuery.skip(skip).limit(paginationLimit);
+console.log('--------------------');
+  // const todos = await Todo.find(findOptions);
+    const contacts = await contactsQuery;
+    console.log(contacts);
+    console.log(findOptions);
+  const total = await Contact.count(findOptions);
+
+  res.status(200).json({
+    total,
+    contacts,
+  });
+
 })
 
 /**

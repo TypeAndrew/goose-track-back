@@ -21,8 +21,9 @@ const usersSchema = new Schema({
         default: null,
 
     },
-    avatarurl: {
-        tepe: String,
+    avatarURL: {
+        type: String,
+        default: null,
     },
 })
 
