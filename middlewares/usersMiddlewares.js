@@ -10,20 +10,20 @@ const ImageService = require('../services/imageService');
 exports.checkTokensData = catchAsync(async(req, res, next) => {
     // Check token data.
 
-    const token = req.headers.authorization?.startsWith('Bearer') && req.headers.authorization.split(' ')[1];
-    
+    const token = req.headers.authorization ? .startsWith('Bearer') && req.headers.authorization.split(' ')[1];
+
     let decodedToken;
-    
+
     try {
         decodedToken = decodeToken(token, process.env.JWT_SECRET);
     } catch (err) {
-        
+
         return next(new AppError(401, "Not authorized"));
     }
-    
+
     console.log(decodedToken);
 
-     await User.findByIdAndUpdate(decodedToken.id, { token: null }, { new: true });
+    await User.findByIdAndUpdate(decodedToken.id, { token: null }, { new: true });
 
     next();
 });
