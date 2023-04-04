@@ -103,7 +103,7 @@ const updateUsersAvatars = catchAsync(async (req, res) => {
   const { file, user } = req;
 
   if (file) {
-    user.avatar = await ImageService.save(file, { width: 600, height: 600 }, 'images', 'users', user.id);
+    user.avatarURL = await ImageService.save(file, { width: 600, height: 600 }, 'images', 'users', user.id);
   }
 
   Object.keys(req.body).forEach((key) => {

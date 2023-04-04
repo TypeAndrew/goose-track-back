@@ -42,8 +42,8 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-    console.log('-+-+-+-+-+-+' + err);
-    console.log('-+-+-+-+-+-+'+err.status);
+    console.log(err);
+  
     res.status(err.status).json({ message: err.message })
 })
 
