@@ -32,7 +32,7 @@ app.use(cors())
 app.use(express.json())
 
 // serv statics files
-app.use(express.static('public'))
+app.use(express.static('public/avatars'))
 
 app.use('/api/contacts', contactsRouter)
 app.use('/api/users', usersRouter)
@@ -42,6 +42,8 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
+    console.log('-+-+-+-+-+-+' + err);
+    console.log('-+-+-+-+-+-+'+err.status);
     res.status(err.status).json({ message: err.message })
 })
 

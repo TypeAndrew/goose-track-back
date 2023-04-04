@@ -1,5 +1,7 @@
 const { model, Schema } = require('mongoose');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+
 
 const usersSchema = new Schema({
     password: {
@@ -29,6 +31,12 @@ const usersSchema = new Schema({
 
 // Pre save hook
 usersSchema.pre('save', async function(next) {
+   
+    if (this.isNew) {
+        const emailHash = crypto.createHash('md5').update(this.email).digest('hex');
+
+        this.avatar = `https://www.gravatar.com/avatar/${emailHash}.jpg?d=retro`;
+     }
     if (!this.isModified('password')) return next();
 
     const salt = await bcrypt.genSalt(10);
