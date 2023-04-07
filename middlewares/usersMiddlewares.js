@@ -40,7 +40,7 @@ exports.checkUserData = catchAsync(async(req, res, next) => {
     const { email, password } = req.body;
 
   const user = await User.findOne({ email: email }).select('+password');
-  console.log('vvvvvvvvvvv')
+
    console.log(''+email +' ' +password);
     if (!user) return next(new AppError(401, 'Not authorized'));
 
@@ -49,7 +49,7 @@ exports.checkUserData = catchAsync(async(req, res, next) => {
     if (!passwordIsValid) return next(new AppError(401, 'Not authorized'));
 
     req.body = user;
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>');
+
     console.log(user);
     next();
 });
