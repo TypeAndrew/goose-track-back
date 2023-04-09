@@ -25,6 +25,20 @@ const getUsers = catchAsync(async(req, res) => {
 
 })
 
+const verificationMailUsers = catchAsync(async(req, res) => {
+    
+    const editUserData = req.body;
+
+        editUserData.verificationToken = null;
+        editUserData.verify = true;
+        await editUserData.save();
+
+        res.status(200).json({
+             message: 'Verification successful'
+        },);
+        
+ })
+
 /**
  * Add new user (registration)
  */
@@ -39,7 +53,7 @@ const signupUsers = catchAsync(async(req, res) => {
     newUserData.verificationToken = uuid();
     const newUser = await User.create(newUserData);
     console.log('----------');
-  
+     
     
     console.log(newUser);
     // next();
@@ -133,6 +147,19 @@ const getUser = (req, res) => {
   });
 };
 
+const verify = catchAsync(async (req, res) => {
+    
+    const { email } = req.query;
+    const user = await User.findOne({ email: email }).select('+password');
+  
+    try {
+        await new Email(user, 'localhost:3000/api/users/'+user.verificationToken).sendHello();
+    } catch (err) {
+        console.log(process.env)
+        console.log(err);
+    }
+});
+
 module.exports = {
     getUsers,
     signupUsers,
@@ -141,4 +168,6 @@ module.exports = {
     currentUsers,
     updateUsersAvatars,
     getUser,
+    verificationMailUsers,
+    verify,
 }

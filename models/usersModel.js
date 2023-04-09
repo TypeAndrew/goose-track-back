@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
 
+
 const usersSchema = new Schema({
     password: {
         type: String,
@@ -27,6 +28,14 @@ const usersSchema = new Schema({
         type: String,
         default: null,
     },
+    verify: {
+        type: Boolean,
+        default: false,
+    },
+    verificationToken: {
+        type: String,
+
+    }
 })
 
 // Pre save hook
@@ -42,7 +51,7 @@ usersSchema.pre('save', async function(next) {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     // const passwordIsValid = await bcrypt.compare('Pass&2234', hashedPassword);
-
+   
     next();
 });
 

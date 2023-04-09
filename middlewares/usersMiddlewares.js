@@ -41,12 +41,31 @@ exports.checkUserData = catchAsync(async(req, res, next) => {
 
   const user = await User.findOne({ email: email }).select('+password');
 
-   console.log(''+email +' ' +password);
+  console.log('' + email + ' ' + password);
     if (!user) return next(new AppError(401, 'Not authorized'));
 
+    if (!user.verify) return next(new AppError(401, 'Not authorized'));
+  
     const passwordIsValid = await user.checkPassword(password, user.password);
 
     if (!passwordIsValid) return next(new AppError(401, 'Not authorized'));
+
+    req.body = user;
+
+    console.log(user);
+    next();
+});
+
+exports.checkMailToken = catchAsync(async(req, res, next) => {
+    // Check new user data.
+
+  const  mailToken  = req.query.token;
+  const user = await User.findOne({ verificationToken: mailToken }).select('+password');
+
+   console.log(''+mailToken);
+    if (!user) return next(new AppError(404 , 'User not found'));
+
+    if (mailToken !== user.verificationToken) return next(new AppError(401, 'Not authorized'));
 
     req.body = user;
 
