@@ -4,11 +4,12 @@ const gravatar = require('gravatar');
 // const { AppError } = require('../utils');
 const User = require('../models/usersModel');
 const ImageService = require('../services/imageService');
+const Email = require('../services/emailService');
+const uuid = require('uuid').v4;
 
 const signToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN
 });
-
 
 
 /**
@@ -25,25 +26,32 @@ const getUsers = catchAsync(async(req, res) => {
 })
 
 /**
- * Add new user 
+ * Add new user (registration)
  */
-const registerUsers = catchAsync(async(req, res) => {
+const signupUsers = catchAsync(async(req, res) => {
 
+   
     const newUserData = {
-        ...req.body
+        ...req.body, 
     };
     newUserData.avatarURL = gravatar.url(newUserData.email);
     console.log(newUserData);
-
+    newUserData.verificationToken = uuid();
     const newUser = await User.create(newUserData);
     console.log('----------');
+  
     
-
     console.log(newUser);
     // next();
     newUser.save();
     // newUser.password = undefined;
     // const token = signToken(newUser._id);
+    try {
+        await new Email(newUser, 'localhost:3000/api/users/'+newUser.verificationToken).sendHello();
+    } catch (err) {
+        console.log(process.env)
+        console.log(err);
+    }
 
     res.status(201).json({
         newUser: newUser,
@@ -127,7 +135,7 @@ const getUser = (req, res) => {
 
 module.exports = {
     getUsers,
-    registerUsers,
+    signupUsers,
     loginUsers,
     logOutUsers,
     currentUsers,
