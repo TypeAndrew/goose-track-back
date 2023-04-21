@@ -1,0 +1,173 @@
+const jwt = require('jsonwebtoken');
+const { catchAsync } = require('../utils');
+const gravatar = require('gravatar');
+// const { AppError } = require('../utils');
+const User = require('../models/usersModel');
+const ImageService = require('../services/imageService');
+const Email = require('../services/emailService');
+const uuid = require('uuid').v4;
+
+const signToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN
+});
+
+
+/**
+ * Get contacts list 
+ */
+const getUsers = catchAsync(async(req, res) => {
+
+    const users = await User.find().lean();
+
+    res.status(200).json({
+        users,
+    }, );
+
+})
+
+const verificationMailUsers = catchAsync(async(req, res) => {
+    
+    const editUserData = req.body;
+
+        editUserData.verificationToken = null;
+        editUserData.verify = true;
+        await editUserData.save();
+
+        res.status(200).json({
+             message: 'Verification successful'
+        },);
+        
+ })
+
+/**
+ * Add new user (registration)
+ */
+const signupUsers = catchAsync(async(req, res) => {
+
+   
+    const newUserData = {
+        ...req.body, 
+    };
+    newUserData.avatarURL = gravatar.url(newUserData.email);
+    console.log(newUserData);
+    newUserData.verificationToken = uuid();
+    const newUser = await User.create(newUserData);
+    console.log('----------');
+     
+    
+    console.log(newUser);
+    // next();
+    newUser.save();
+    // newUser.password = undefined;
+    // const token = signToken(newUser._id);
+    try {
+        await new Email(newUser, 'localhost:3000/api/users/'+newUser.verificationToken).sendHello();
+    } catch (err) {
+        console.log(process.env)
+        console.log(err);
+    }
+
+    res.status(201).json({
+        newUser: newUser,
+    });
+})
+
+const loginUsers = catchAsync(async(req, res, next) => {
+
+
+    const user = req.body;
+    // user.password = undefined;
+    console.log(user);
+    const token = (user.token === null) ? signToken(user._id) : user.token;
+
+    // const updatedUser = await User.findByIdAndUpdate(user._id, { token }, { new: true });
+    user.token = token;
+
+    const updatedUser = await user.save();
+
+    user.password = undefined;
+
+    res.status(201).json({
+
+        token,
+        updatedUser,
+    });
+})
+
+const logOutUsers = catchAsync(async(req, res, next) => {
+
+    const user = req.body;
+
+    user.token = null;
+
+    const updatedUser = await user.save();
+
+    user.password = undefined;
+
+    res.status(201).json({
+
+        updatedUser,
+    });
+})
+
+const currentUsers = catchAsync(async(req, res, next) => {
+
+    const Authorization = req.headers.authorization;
+
+    res.status(201).json({
+
+        Authorization,
+    });
+})
+
+
+const updateUsersAvatars = catchAsync(async (req, res) => {
+  const { file, user } = req;
+
+  if (file) {
+    user.avatarURL = await ImageService.save(file, { width: 600, height: 600 }, 'images', 'users', user.id);
+  }
+
+  Object.keys(req.body).forEach((key) => {
+    user[key] = req.body[key];
+    // user.name = req.body.name;
+    // user.birthyear = req.body.birthyear;
+  });
+
+  const updatedUser = await user.save();
+
+  res.status(200).json({
+    user: updatedUser,
+  });
+});
+
+const getUser = (req, res) => {
+  res.status(200).json({
+    user: req.user,
+  });
+};
+
+const verify = catchAsync(async (req, res) => {
+    
+    const { email } = req.query;
+    const user = await User.findOne({ email: email }).select('+password');
+  
+    try {
+        await new Email(user, 'localhost:3000/api/users/'+user.verificationToken).sendHello();
+    } catch (err) {
+        console.log(process.env)
+        console.log(err);
+    }
+});
+
+module.exports = {
+    getUsers,
+    signupUsers,
+    loginUsers,
+    logOutUsers,
+    currentUsers,
+    updateUsersAvatars,
+    getUser,
+    verificationMailUsers,
+    verify,
+}

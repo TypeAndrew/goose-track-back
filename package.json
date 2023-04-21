@@ -9,11 +9,26 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
+    "bcrypt": "^5.1.0",
     "cors": "2.8.5",
-    "cross-env": "7.0.3",
+    "cross-env": "^7.0.3",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "fs-extra": "^11.1.1",
+    "gravatar": "^1.8.2",
+    "html-to-text": "^9.0.5",
+    "jimp": "^0.22.7",
     "joi": "^17.8.3",
-    "morgan": "1.10.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.1",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.1",
+    "path": "^0.12.7",
+    "pug": "^3.0.2",
+    "sharp": "^0.32.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
@@ -24,5 +39,18 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "^2.0.21"
-  }
+  },
+  "description": "Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)\r Форк створить репозиторій на вашому http://github.com",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TypeAndrew/node-rest-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TypeAndrew/node-rest-api/issues"
+  },
+  "homepage": "https://github.com/TypeAndrew/node-rest-api#readme"
 }
