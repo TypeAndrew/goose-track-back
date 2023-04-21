@@ -44,13 +44,16 @@
   "main": ".eslintrc.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TypeAndrew/node-rest-api.git"
+    "url": "git+https://github.com/TypeAndrew/goose-track-back.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/TypeAndrew/node-rest-api/issues"
+    "url": "https://github.com/TypeAndrew/goose-track-back/issues"
   },
-  "homepage": "https://github.com/TypeAndrew/node-rest-api#readme"
+  "homepage": "https://github.com/TypeAndrew/goose-track-back#readme"
+  ,"engines": {
+    "node": ">=14 <15"
+  }
 }
