@@ -6,4 +6,4 @@ module.exports = {
   AppError,
   catchAsync,
   validators,
-}; 
+};  
