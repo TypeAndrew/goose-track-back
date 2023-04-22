@@ -2,9 +2,8 @@ const User = require('../models/usersModel');
 const jwt = require('jsonwebtoken');
 const { catchAsync, AppError } = require('../utils');
 const decodeToken = (tocken, secret) => jwt.verify(tocken, secret);
- const ImageService = require('../services/imageService');
-// onst multer = require('multer');
-// const uuid = require('uuid').v4;
+const ImageService = require('../services/imageService');
+
 /**
  * Check token data.
  */

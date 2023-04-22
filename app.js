@@ -8,8 +8,8 @@ const mongoose = require('mongoose');
 dotenv.config({ path: './.env' })
 
 // const taskssRouter = require('./routes/api/contacts');
+const authsRouter = require('./routes/api/auth');
 const usersRouter = require('./routes/api/users');
-
 // initialize application
 const app = express();
 
@@ -35,7 +35,8 @@ app.use(express.json())
 app.use(express.static('public/avatars'))
 
 // app.use('/api/tasks', contactsRouter)
-app.use('/api/users', usersRouter)
+app.use('/auth', authsRouter)
+app.use('/user', usersRouter)
 
 app.use((req, res) => {
     res.status(404).json({ message: 'Not found' })

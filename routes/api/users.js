@@ -10,11 +10,6 @@ router.get('/', usersControllers.getUsers);
 router.get('/verification', usersMiddlewares.checkMailToken);
 router.get('/verification', usersControllers.verificationMailUsers);
 
-router.post('/signup', usersControllers.signupUsers);
-
-router.post('/login', usersMiddlewares.checkUserData);
-router.post('/login', usersControllers.loginUsers);
-
 router.post('/logout', usersMiddlewares.checkUserData);
 router.post('/logout', usersControllers.logOutUsers);
 
