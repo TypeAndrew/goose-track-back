@@ -9,7 +9,7 @@ const usersMiddlewares = require('../../middlewares/usersMiddlewares');
 router.get('/', usersControllers.getUsers);
 router.get('/verification', usersMiddlewares.checkMailToken);
 router.get('/verification', usersControllers.verificationMailUsers);
-router.post('/verify', usersControllers.verify);
+
 router.post('/signup', usersControllers.signupUsers);
 
 router.post('/login', usersMiddlewares.checkUserData);

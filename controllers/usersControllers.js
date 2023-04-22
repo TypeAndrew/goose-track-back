@@ -4,7 +4,7 @@ const gravatar = require('gravatar');
 // const { AppError } = require('../utils');
 const User = require('../models/usersModel');
 const ImageService = require('../services/imageService');
-const Email = require('../services/emailService');
+// const Email = require('../services/emailService');
 const uuid = require('uuid').v4;
 
 const signToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -60,12 +60,6 @@ const signupUsers = catchAsync(async(req, res) => {
     newUser.save();
     // newUser.password = undefined;
     // const token = signToken(newUser._id);
-    try {
-        await new Email(newUser, 'localhost:3000/api/users/'+newUser.verificationToken).sendHello();
-    } catch (err) {
-        console.log(process.env)
-        console.log(err);
-    }
 
     res.status(201).json({
         newUser: newUser,
@@ -147,18 +141,6 @@ const getUser = (req, res) => {
   });
 };
 
-const verify = catchAsync(async (req, res) => {
-    
-    const { email } = req.query;
-    const user = await User.findOne({ email: email }).select('+password');
-  
-    try {
-        await new Email(user, 'localhost:3000/api/users/'+user.verificationToken).sendHello();
-    } catch (err) {
-        console.log(process.env)
-        console.log(err);
-    }
-});
 
 module.exports = {
     getUsers,
@@ -169,5 +151,5 @@ module.exports = {
     updateUsersAvatars,
     getUser,
     verificationMailUsers,
-    verify,
+
 }

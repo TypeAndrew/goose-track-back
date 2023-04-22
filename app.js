@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 // use environment variables (.env file)
 dotenv.config({ path: './.env' })
 
-const contactsRouter = require('./routes/api/contacts');
+// const taskssRouter = require('./routes/api/contacts');
 const usersRouter = require('./routes/api/users');
 
 // initialize application
@@ -34,7 +34,7 @@ app.use(express.json())
 // serv statics files
 app.use(express.static('public/avatars'))
 
-app.use('/api/contacts', contactsRouter)
+// app.use('/api/tasks', contactsRouter)
 app.use('/api/users', usersRouter)
 
 app.use((req, res) => {
