@@ -52,7 +52,6 @@ const signupUsers = catchAsync(async(req, res) => {
     console.log(newUserData);
     newUserData.verificationToken = uuid();
     const newUser = await User.create(newUserData);
-    console.log('----------');
      
     
     console.log(newUser);
