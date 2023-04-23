@@ -47,14 +47,14 @@ const loginUsers = catchAsync(async(req, res, next) => {
     // const updatedUser = await User.findByIdAndUpdate(user._id, { token }, { new: true });
     user.token = token;
 
-    const updatedUser = await user.save();
+    await user.save();
 
     user.password = undefined;
 
     res.status(201).json({
 
         token,
-        updatedUser,
+        user,
     });
 })
 
