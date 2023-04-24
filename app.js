@@ -10,6 +10,8 @@ dotenv.config({ path: './.env' })
 // const taskssRouter = require('./routes/api/contacts');
 const authsRouter = require('./routes/api/auth');
 const usersRouter = require('./routes/api/users');
+
+const taskRouter = require("../routes/api/task");
 // initialize application
 const app = express();
 
@@ -37,6 +39,8 @@ app.use(express.static('public/avatars'))
 // app.use('/api/tasks', contactsRouter)
 app.use('/auth', authsRouter)
 app.use('/user', usersRouter)
+
+app.use('/task', taskRouter)
 
 app.use((req, res) => {
     res.status(404).json({ message: 'Not found' })
