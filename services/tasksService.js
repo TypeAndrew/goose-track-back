@@ -1,4 +1,4 @@
-const Task = require("./models/taskModel");
+const Task = require("../models/taskModel");
 
 const create = async (body) => Task.create(body);
 
@@ -10,4 +10,4 @@ const findAndUpdateTask = async (id, body) => Task.findByIdAndUpdate(id, body, {
 
 const findAndDeleteTask = async (id) => Task.findByIdAndDelete(id);
 
-module.exports = { create, getAllTasks, findTaskbyId, findAndUpdateTask, findAndDeleteTask };
+module.exports = { create, getAllTasks, findTaskbyId, findAndUpdateTask, findAndDeleteTask, Task };
