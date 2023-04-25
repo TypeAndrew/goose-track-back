@@ -10,8 +10,9 @@ dotenv.config({ path: './.env' })
 // const taskssRouter = require('./routes/api/contacts');
 const authsRouter = require('./routes/api/auth');
 const usersRouter = require('./routes/api/users');
+const columnsRouter = require('./routes/api/columns');
+const taskRouter = require("./routes/api/task");
 
-const taskRouter = require("../routes/api/task");
 // initialize application
 const app = express();
 
@@ -20,7 +21,7 @@ if (process.env.NODE_ENV === 'development') app.use(logger('dev'));
 
 // Mongo DB connection
 mongoose.connect(process.env.MONGO_URL).then((connection) => {
-    console.log(connection);
+    // console.log(connection);
     console.log('Mongo DB connected..');
 }).catch((err) => {
     console.log(err);
@@ -39,6 +40,7 @@ app.use(express.static('public/avatars'))
 // app.use('/api/tasks', contactsRouter)
 app.use('/auth', authsRouter)
 app.use('/user', usersRouter)
+app.use("/columns", columnsRouter)
 
 app.use('/task', taskRouter)
 
@@ -48,7 +50,7 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
     console.log(err);
-  
+
     res.status(err.status).json({ message: err.message })
 })
 
