@@ -18,7 +18,11 @@ exports.checkTokensData = catchAsync(async(req, res, next) => {
       decodedToken = decodeToken(token, process.env.JWT_SECRET);
       console.log(decodedToken);
     } catch (err) {
-
+       
+      if (err.message === 'jwt expired') {
+        const userExpired = await User.findOneAndUpdate({token: token},{ $set: {token: null}});
+        userExpired.save();
+      }
         return next(new AppError(401, "Not authorized"));
     }
 
@@ -43,7 +47,7 @@ exports.checkUserData = catchAsync(async(req, res, next) => {
   console.log('' + email + ' ' + password);
     if (!user) return next(new AppError(401, 'Not authorized'));
 
-    if (!user.verify) return next(new AppError(401, 'Not authorized'));
+    // if (!user.verify) return next(new AppError(401, 'Not authorized'));
   
     const passwordIsValid = await user.checkPassword(password, user.password);
 

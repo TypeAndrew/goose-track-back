@@ -50,9 +50,11 @@ const logOutUsers = catchAsync(async(req, res, next) => {
 const currentUsers = catchAsync(async(req, res, next) => {
 
     const Authorization = req.headers.authorization;
-
+    const user = req.user;
+    user.password = null;
+  
     res.status(201).json({
-
+        user,
         Authorization,
     });
 })

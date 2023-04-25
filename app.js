@@ -11,6 +11,8 @@ dotenv.config({ path: './.env' })
 const authsRouter = require('./routes/api/auth');
 const usersRouter = require('./routes/api/users');
 const columnsRouter = require('./routes/api/columns');
+const taskRouter = require("./routes/api/task");
+
 // initialize application
 const app = express();
 
@@ -40,13 +42,15 @@ app.use('/auth', authsRouter)
 app.use('/user', usersRouter)
 app.use("/columns", columnsRouter)
 
+app.use('/task', taskRouter)
+
 app.use((req, res) => {
     res.status(404).json({ message: 'Not found' })
 })
 
 app.use((err, req, res, next) => {
     console.log(err);
-  
+
     res.status(err.status).json({ message: err.message })
 })
 
