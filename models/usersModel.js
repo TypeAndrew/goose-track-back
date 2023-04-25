@@ -39,6 +39,10 @@ const usersSchema = new Schema({
     verificationToken: {
         type: String,
 
+    },
+    countLogin: {
+        type: Number,
+        default: 0,
     }
 })
 

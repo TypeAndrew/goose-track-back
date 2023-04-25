@@ -33,7 +33,7 @@ const signupUsers = catchAsync(async(req, res) => {
     newUser.token = token;
     await newUser.save();
     newUser.password = undefined;
-    
+
     res.status(201).json({
         newUser: newUser,
     });
@@ -48,7 +48,7 @@ const loginUsers = catchAsync(async(req, res, next) => {
 
     // const updatedUser = await User.findByIdAndUpdate(user._id, { token }, { new: true });
     user.token = token;
-
+    user.countLogin++;
     await user.save();
 
     user.password = undefined;
