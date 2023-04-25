@@ -1,5 +1,5 @@
 const { isValidObjectId } = require("mongoose");
-const tasksServices = require("../services/tasks");
+const tasksServices = require("../services/tasksService");
 
 const getAllTasks = async (req, res) => {
   const userId = req.user.id;
