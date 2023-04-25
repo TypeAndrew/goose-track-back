@@ -42,9 +42,9 @@ exports.checkUserData = catchAsync(async(req, res, next) => {
 
     const { email, password } = req.body;
 
-  const user = await User.findOne({ email: email }).select('+password');
+    const user = await User.findOne({ email: email }).select('+password');
 
-  console.log('' + email + ' ' + password);
+    console.log('' + email + ' ' + password);
     if (!user) return next(new AppError(401, 'Not authorized'));
 
     // if (!user.verify) return next(new AppError(401, 'Not authorized'));
