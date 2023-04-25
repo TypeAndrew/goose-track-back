@@ -1,9 +1,9 @@
 const { isValidObjectId } = require("mongoose");
-// const tasksService = require("./service");
+const tasksServices = require("../services/Tasks");
 
 const getAllTasks = async (req, res) => {
   const userId = req.user.id;
-  const tasks = await tasksService.getAllTasks(userId);
+  const tasks = await tasksServices.getAllTasks(userId);
   return res.status(200).json({ tasks });
 };
 
@@ -12,13 +12,18 @@ const createTask = async (req, res) => {
   const { title,
     start,
     end,
-    priority } = req.body;
+      priority,
+      date,
+    category,
+  } = req.body;
 
-  const task = await taskService.create({
+  const task = await tasksServices.create({
     title,
     start,
     end,
     priority,
+    date,
+    category,
     owner,
   });
 
@@ -28,7 +33,8 @@ const createTask = async (req, res) => {
 const editTask = async (req, res) => {
   const ownerId = req.user.id;
   const taskId = req.params.taskId;
-  const { title, start, end, priority } = req.body;
+  const { title, start, end, priority,date,
+    category, } = req.body;
 
   if (!isValidObjectId(taskId)) {
     return res.status(400).json({
@@ -42,17 +48,19 @@ const editTask = async (req, res) => {
     return res.status(400).json({ message: "missing fields" });
   }
 
-  const findTask = await taskService.findTaskbyId(taskId);
+  const findTask = await tasksServices.findTaskbyId(taskId);
 
   if (!findTask || findTask.owner != ownerId) {
     return res.status(400).json({ message: "Invalid card id" });
   }
 
-  const task = await taskService.findAndUpdateTask(taskId, {
+  const task = await tasksServices.findAndUpdateTask(taskId, {
    title,
     start,
     end,
     priority,
+    date,
+    category,
   });
 
   return res.status(200).json({ task });
@@ -70,13 +78,13 @@ const deleteTask = async (req, res) => {
     });
   }
 
-  const findTask = await taskService.findTaskbyId(taskId);
+  const findTask = await tasksServices.findTaskbyId(taskId);
 
   if (!findTask || findTask.owner != ownerId) {
     return res.status(400).json({ message: "Invalid card id" });
   }
 
-  await taskService.findAndDeleteTask(taskId);
+  await tasksServices.findAndDeleteTask(taskId);
 
   return res.sendStatus(204);
 };

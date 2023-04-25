@@ -14,6 +14,12 @@ const Task = model(
     },
     start: String,
     end: String,
+    date: String,
+    category: {
+      type: String,
+      enum: ["To do", "In progress", "Done"],
+      default: "To do",
+    },
     
     
    
