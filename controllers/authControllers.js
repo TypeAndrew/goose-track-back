@@ -27,10 +27,13 @@ const signupUsers = catchAsync(async(req, res) => {
     
     console.log(newUser);
     // next();
-    newUser.save();
-    // newUser.password = undefined;
-    // const token = signToken(newUser._id);
-
+    await newUser.save();
+    
+    const token = signToken(newUser._id);
+    newUser.token = token;
+    await newUser.save();
+    newUser.password = undefined;
+    
     res.status(201).json({
         newUser: newUser,
     });
@@ -40,8 +43,7 @@ const loginUsers = catchAsync(async(req, res, next) => {
 
 
     const user = req.body;
-    // user.password = undefined;
-    console.log(user);
+    
     const token = (user.token === null) ? signToken(user._id) : user.token;
 
     // const updatedUser = await User.findByIdAndUpdate(user._id, { token }, { new: true });
