@@ -10,6 +10,13 @@ const schema = Joi.object({
   end: Joi.string()
     .pattern(new RegExp("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$"))
     .message("Invalid 'time'. Please, use HH:MM string format")
+        .required(),
+  date: Joi.string()
+    .pattern(new RegExp("[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])"))
+    .message("Invalid 'date'. Please, use YYYY-MM-DD string format")
+        .required(),
+  category: Joi.string()
+    .valid("To do", "In progress", "Done")
     .required(),
   
 });
@@ -31,7 +38,14 @@ const schemaToEditTask = Joi.object({
     .message("Invalid 'time'. Please, use HH:MM string format"),
   end: Joi.string()
     .pattern(new RegExp("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$"))
-    .message("Invalid 'time'. Please, use HH:MM string format"),
+        .message("Invalid 'time'. Please, use HH:MM string format"),
+  date: Joi.string()
+    .pattern(new RegExp("[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])"))
+    .message("Invalid 'date'. Please, use YYYY-MM-DD string format")
+        .required(),
+  category: Joi.string()
+    .valid("To do", "In progress", "Done")
+    .required(),
   
 });
 
