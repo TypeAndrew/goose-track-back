@@ -11,7 +11,7 @@ dotenv.config({ path: './.env' })
 const authsRouter = require('./routes/api/auth');
 const usersRouter = require('./routes/api/users');
 
-const taskRouter = require("../routes/api/task");
+const taskRouter = require("./routes/api/task");
 // initialize application
 const app = express();
 
@@ -48,7 +48,7 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
     console.log(err);
-  
+
     res.status(err.status).json({ message: err.message })
 })
 

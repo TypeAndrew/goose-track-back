@@ -1,11 +1,11 @@
 const express = require("express");
 
-const taskController = require("../controllers/tasks");
-const { checkTokensData } = require("../middlewares/usersMiddlewares");
+const taskController = require("../../controllers/tasks");
+const { checkTokensData } = require("../../middlewares/usersMiddlewares");
 const {
-  validateData,
-  validateDataForEditing,
-} = require("../middlewares/tasks");
+    validateData,
+    validateDataForEditing,
+} = require("../../middlewares/tasks");
 
 const router = express.Router();
 

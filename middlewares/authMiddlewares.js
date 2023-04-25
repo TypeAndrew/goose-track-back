@@ -8,20 +8,20 @@ const { catchAsync, AppError } = require('../utils');
 exports.checkAuthData = catchAsync(async(req, res, next) => {
     // Check new user data.
 
-  const { email, password } = req.body;
+    const { email, password } = req.body;
 
-  const user = await User.findOne({ email: email }).select('+password');
+    const user = await User.findOne({ email: email }).select('+password');
 
-  if (!user) return next(new AppError(401, 'Not authorized'));
-  
-  const passwordIsValid = await user.checkPassword(password, user.password);
+    if (!user) return next(new AppError(401, 'Not authorized'));
 
-  if (!passwordIsValid) return next(new AppError(401, 'Not authorized'));
+    const passwordIsValid = await user.checkPassword(password, user.password);
 
-  req.body = user;
+    if (!passwordIsValid) return next(new AppError(401, 'Not authorized'));
 
-  next();
+    req.body = user;
+
+    next();
 
 });
 
-module.exports = { user };
+// module.exports = { User };

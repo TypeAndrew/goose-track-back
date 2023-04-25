@@ -52,8 +52,8 @@
   "bugs": {
     "url": "https://github.com/TypeAndrew/goose-track-back/issues"
   },
-  "homepage": "https://github.com/TypeAndrew/goose-track-back#readme"
-  ,"engines": {
+  "homepage": "https://github.com/TypeAndrew/goose-track-back#readme",
+  "engines": {
     "node": ">=18 <19"
   }
 }
