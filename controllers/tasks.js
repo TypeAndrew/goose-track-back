@@ -50,7 +50,7 @@ const editTask = async (req, res) => {
 
   const findTask = await tasksServices.findTaskbyId(taskId);
 
-  if (!findTask || findTask.owner != ownerId) {
+  if (!findTask || findTask.owner !== ownerId) {
     return res.status(400).json({ message: "Invalid card id" });
   }
 
@@ -80,7 +80,7 @@ const deleteTask = async (req, res) => {
 
   const findTask = await tasksServices.findTaskbyId(taskId);
 
-  if (!findTask || findTask.owner != ownerId) {
+  if (!findTask || findTask.owner !== ownerId) {
     return res.status(400).json({ message: "Invalid card id" });
   }
 
