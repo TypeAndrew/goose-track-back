@@ -24,4 +24,4 @@ exports.checkAuthData = catchAsync(async(req, res, next) => {
 
 });
 
-module.exports = { user };
+module.exports = { User };
