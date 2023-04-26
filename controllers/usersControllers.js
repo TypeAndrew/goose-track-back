@@ -86,6 +86,25 @@ const getUser = (req, res) => {
     });
 };
 
+/**
+ * Update user data
+ */
+const updateUserData = async(req, res, next) => {
+
+    const user = req.user;
+
+    Object.keys(req.body).forEach((key) => {
+        user[key] = req.body[key];
+
+    });
+
+    user.save();
+    // user.password = null;
+    res.status(200).json({
+        user: user,
+    });
+
+}
 
 module.exports = {
     getUsers,
@@ -94,5 +113,6 @@ module.exports = {
     updateUsersAvatars,
     getUser,
     verificationMailUsers,
+    updateUserData,
 
 }

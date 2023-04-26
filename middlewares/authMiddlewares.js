@@ -23,7 +23,3 @@ exports.checkAuthData = catchAsync(async(req, res, next) => {
     next();
 
 });
-
-
-
-

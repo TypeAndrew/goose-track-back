@@ -7,8 +7,6 @@ const usersMiddlewares = require('../../middlewares/usersMiddlewares');
 
 
 router.get('/', usersControllers.getUsers);
-router.get('/verification', usersMiddlewares.checkMailToken);
-router.get('/verification', usersControllers.verificationMailUsers);
 
 router.post('/logout', usersMiddlewares.checkTokensData);
 router.post('/logout', usersControllers.logOutUsers);
@@ -16,9 +14,10 @@ router.post('/logout', usersControllers.logOutUsers);
 router.post('/current', usersMiddlewares.checkTokensData);
 router.post('/current', usersControllers.currentUsers);
 
-router.use(usersMiddlewares.checkTokensData);
-router.get('/me', usersControllers.getUser);
+router.patch('/info', usersMiddlewares.checkTokensData);
+router.patch('/info', usersControllers.updateUserData);
 
+router.patch('/avatars', usersMiddlewares.checkTokensData);
 router.patch('/avatars', usersMiddlewares.uploadUserPhoto);
 router.patch('/avatars', usersControllers.updateUsersAvatars);
 

@@ -1,6 +1,6 @@
 const User = require('../models/usersModel');
 const jwt = require('jsonwebtoken');
-const { catchAsync, AppError } = require('../utils');
+const { catchAsync, AppError, validators } = require('../utils');
 const decodeToken = (tocken, secret) => jwt.verify(tocken, secret);
 const ImageService = require('../services/imageService');
 
@@ -79,5 +79,51 @@ exports.checkMailToken = catchAsync(async(req, res, next) => {
     console.log(user);
     next();
 });
+
+/**
+ * Check new user data.
+ */
+exports.checkValidData = (req, res, next) => {
+    // Check new user data.
+    console.log(req.query);
+
+    const { error, value } = validators.createUserValidator(req.body);
+
+    if (error) return next(new AppError(400, error.details[0].message));
+
+    req.body = value;
+
+    next();
+};
+
+/**
+ * Check user id.
+ */
+exports.checkUserId = async(req, res, next) => {
+    try {
+        const { UserId } = req.params;
+
+        const user = ObjectId.isValid(UserId) ? await user.findById({ _id: UserId }) : undefined;
+
+        if (user) {
+
+            req.body = user;
+
+            next();
+        } else {
+            // if no contact with that id, sent 'not found' request
+            const error = new Error(`Contact with ${UserId} Not found`);
+
+            error.status = 404;
+
+            next(error);
+
+        }
+    } catch (err) {
+        console.log(err);
+        // catch any unpredictable errors
+        next(err);
+    }
+};
 
 exports.uploadUserPhoto = ImageService.upload('avatarURL');
