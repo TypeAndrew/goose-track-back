@@ -7,6 +7,7 @@ const authsMiddlewares = require('../../middlewares/authMiddlewares');
 
 const router = express.Router();
 
+router.post('/register', authsMiddlewares.checkUserData);
 router.post('/register', usersControllers.signupUsers);
 
 router.post('/login', authsMiddlewares.checkAuthData);

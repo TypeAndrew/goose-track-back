@@ -1,6 +1,6 @@
 const User = require('../models/usersModel');
 const jwt = require('jsonwebtoken');
-const { catchAsync, AppError, validators } = require('../utils');
+const { catchAsync, AppError } = require('../utils');
 const decodeToken = (tocken, secret) => jwt.verify(tocken, secret);
 const ImageService = require('../services/imageService');
 
@@ -44,22 +44,13 @@ exports.checkTokensData = catchAsync(async(req, res, next) => {
 exports.checkUserData = catchAsync(async(req, res, next) => {
     // Check new user data.
 
-    const { email, password } = req.body;
+    const { email } = req.body;
 
     const user = await User.findOne({ email: email }).select('+password');
 
-    console.log('' + email + ' ' + password);
-    if (!user) return next(new AppError(401, 'Not authorized'));
+    if (user) return next(new AppError(409, 'Email in use'));
 
-    // if (!user.verify) return next(new AppError(401, 'Not authorized'));
-
-    const passwordIsValid = await user.checkPassword(password, user.password);
-
-    if (!passwordIsValid) return next(new AppError(401, 'Not authorized'));
-
-    req.body = user;
-
-    console.log(user);
+   
     next();
 });
 
@@ -87,11 +78,11 @@ exports.checkValidData = (req, res, next) => {
     // Check new user data.
     console.log(req.query);
 
-    const { error, value } = validators.createUserValidator(req.body);
+    // const { error, value } = validators.createUserValidator(req.body);
 
-    if (error) return next(new AppError(400, error.details[0].message));
+   // if (error) return next(new AppError(400, error.details[0].message));
 
-    req.body = value;
+   // req.body = value;
 
     next();
 };
@@ -99,7 +90,7 @@ exports.checkValidData = (req, res, next) => {
 /**
  * Check user id.
  */
-exports.checkUserId = async(req, res, next) => {
+/* exports.checkUserId = async(req, res, next) => {
     try {
         const { UserId } = req.params;
 
@@ -124,6 +115,6 @@ exports.checkUserId = async(req, res, next) => {
         // catch any unpredictable errors
         next(err);
     }
-};
+}; */
 
 exports.uploadUserPhoto = ImageService.upload('avatarURL');

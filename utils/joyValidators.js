@@ -6,10 +6,9 @@ const regPassword = '^[a-zA-Z0-9]{3,30}$';
  */
 exports.createUserValidator = (data) => Joi.object({
 
-    name: Joi.string().min(2).max(50).alphanum().required(),
+    name: Joi.string().min(4).max(16).alphanum().required(),
     email: Joi.string().min(5).max(50).required(),
-    password: Joi.string().regex(regPassword).required(),
-    verify: Joi.boolean(),
+    password: Joi.string().min(6).max(60).regex(regPassword).required(),
     subscription: Joi.string().min(5).max(40).required(),
 
 }).validate(data);
