@@ -10,7 +10,7 @@ router.get('/', usersControllers.getUsers);
 router.get('/verification', usersMiddlewares.checkMailToken);
 router.get('/verification', usersControllers.verificationMailUsers);
 
-router.post('/logout', usersMiddlewares.checkUserData);
+router.post('/logout', usersMiddlewares.checkTokensData);
 router.post('/logout', usersControllers.logOutUsers);
 
 router.post('/current', usersMiddlewares.checkTokensData);

@@ -10,27 +10,31 @@ const ImageService = require('../services/imageService');
 exports.checkTokensData = catchAsync(async(req, res, next) => {
     // Check token data.
 
-    const token = req.headers.authorization?.startsWith('Bearer') && req.headers.authorization.split(' ')[1];
+    const token = req.headers.authorization.startsWith('Bearer') && req.headers.authorization.split(' ')[1];
 
     let decodedToken;
     console.log(token);
     try {
-      decodedToken = decodeToken(token, process.env.JWT_SECRET);
-      console.log(decodedToken);
+        decodedToken = decodeToken(token, process.env.JWT_SECRET);
+
     } catch (err) {
-       
-      if (err.message === 'jwt expired') {
-        const userExpired = await User.findOneAndUpdate({token: token},{ $set: {token: null}});
-        userExpired.save();
-      }
+
+        if (err.message === 'jwt expired') {
+            const userExpired = await User.findOneAndUpdate({ token: token }, { $set: { token: null } });
+            userExpired.save();
+        }
         return next(new AppError(401, "Not authorized"));
     }
 
     console.log(decodedToken);
 
-   const user =  await User.findByIdAndUpdate(decodedToken.id, { token: null }, { new: true });
-  req.user = user;
-  console.log(req.user);
+    const user = await User.findById(decodedToken.id);
+
+    req.user = user;
+
+    if (user === undefined || token !== user.token) {
+        next(new AppError(401, "Not authorized"))
+    }
     next();
 });
 
@@ -48,7 +52,7 @@ exports.checkUserData = catchAsync(async(req, res, next) => {
     if (!user) return next(new AppError(401, 'Not authorized'));
 
     // if (!user.verify) return next(new AppError(401, 'Not authorized'));
-  
+
     const passwordIsValid = await user.checkPassword(password, user.password);
 
     if (!passwordIsValid) return next(new AppError(401, 'Not authorized'));
@@ -62,11 +66,11 @@ exports.checkUserData = catchAsync(async(req, res, next) => {
 exports.checkMailToken = catchAsync(async(req, res, next) => {
     // Check new user data.
 
-  const  mailToken  = req.query.token;
-  const user = await User.findOne({ verificationToken: mailToken }).select('+password');
+    const mailToken = req.query.token;
+    const user = await User.findOne({ verificationToken: mailToken }).select('+password');
 
-   console.log(''+mailToken);
-    if (!user) return next(new AppError(404 , 'User not found'));
+    console.log('' + mailToken);
+    if (!user) return next(new AppError(404, 'User not found'));
 
     if (mailToken !== user.verificationToken) return next(new AppError(401, 'Not authorized'));
 
@@ -76,5 +80,4 @@ exports.checkMailToken = catchAsync(async(req, res, next) => {
     next();
 });
 
- exports.uploadUserPhoto = ImageService.upload('avatarURL');
-
+exports.uploadUserPhoto = ImageService.upload('avatarURL');
