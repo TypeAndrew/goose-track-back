@@ -11,8 +11,8 @@ router.get('/', usersControllers.getUsers);
 router.post('/logout', usersMiddlewares.checkTokensData);
 router.post('/logout', usersControllers.logOutUsers);
 
-router.post('/current', usersMiddlewares.checkTokensData);
-router.post('/current', usersControllers.currentUsers);
+router.get('/current', usersMiddlewares.checkTokensData);
+router.get('/current', usersControllers.currentUsers);
 
 router.patch('/info', usersMiddlewares.checkTokensData);
 router.patch('/info', usersControllers.updateUserData);

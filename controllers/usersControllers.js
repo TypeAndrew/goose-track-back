@@ -106,6 +106,8 @@ const updateUserData = async(req, res, next) => {
 
 }
 
+
+
 module.exports = {
     getUsers,
     logOutUsers,

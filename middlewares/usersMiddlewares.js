@@ -50,7 +50,7 @@ exports.checkUserData = catchAsync(async(req, res, next) => {
 
     if (user) return next(new AppError(409, 'Email in use'));
 
-   
+
     next();
 });
 
@@ -74,15 +74,13 @@ exports.checkMailToken = catchAsync(async(req, res, next) => {
 /**
  * Check new user data.
  */
-exports.checkValidData = (req, res, next) => {
+exports.checkValidUserData = (req, res, next) => {
     // Check new user data.
-    console.log(req.query);
+    const { error, value } = validators.createUserValidator(req.body);
 
-    // const { error, value } = validators.createUserValidator(req.body);
+    if (error) return next(new AppError(400, error.details[0].message));
 
-   // if (error) return next(new AppError(400, error.details[0].message));
-
-   // req.body = value;
+    req.body = value;
 
     next();
 };

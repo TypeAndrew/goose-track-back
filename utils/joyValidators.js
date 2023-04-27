@@ -1,14 +1,14 @@
 const Joi = require('joi');
 
-const regPassword = '^[a-zA-Z0-9]{3,30}$';
-/**
+const regPassword = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+/**                  
  * Validate create user data.
  */
 exports.createUserValidator = (data) => Joi.object({
 
-    name: Joi.string().min(4).max(16).alphanum().required(),
+    name: Joi.string().min(4).max(16).alphanum(),
     email: Joi.string().min(5).max(50).required(),
     password: Joi.string().min(6).max(60).regex(regPassword).required(),
-    subscription: Joi.string().min(5).max(40).required(),
+    subscription: Joi.string().min(5).max(40),
 
 }).validate(data);
