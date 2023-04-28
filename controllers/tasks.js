@@ -9,13 +9,7 @@ const getAllTasks = async (req, res) => {
 
 const createTask = async (req, res) => {
   const owner = req.user.id;
-  const { title,
-    start,
-    end,
-      priority,
-      date,
-    category,
-  } = req.body;
+  const { title, start, end, priority, date, category } = req.body;
 
   const task = await tasksServices.create({
     title,
@@ -33,8 +27,7 @@ const createTask = async (req, res) => {
 const editTask = async (req, res) => {
   const ownerId = req.user.id;
   const taskId = req.params.taskId;
-  const { title, start, end, priority,date,
-    category, } = req.body;
+  const { title, start, end, priority, date, category } = req.body;
 
   if (!isValidObjectId(taskId)) {
     return res.status(400).json({
@@ -43,19 +36,18 @@ const editTask = async (req, res) => {
     });
   }
 
-
-  if (!title && !start && !end && !priority ) {
+  if (!title && !start && !end && !priority) {
     return res.status(400).json({ message: "missing fields" });
   }
 
   const findTask = await tasksServices.findTaskbyId(taskId);
 
-  if (!findTask || findTask.owner !== ownerId) {
+  if (!findTask || findTask.owner.valueOf() !== ownerId) {
     return res.status(400).json({ message: "Invalid card id" });
   }
 
   const task = await tasksServices.findAndUpdateTask(taskId, {
-   title,
+    title,
     start,
     end,
     priority,
@@ -65,7 +57,6 @@ const editTask = async (req, res) => {
 
   return res.status(200).json({ task });
 };
-
 
 const deleteTask = async (req, res) => {
   const ownerId = req.user.id;
@@ -78,15 +69,19 @@ const deleteTask = async (req, res) => {
     });
   }
 
-  const findTask = await tasksServices.findTaskbyId(taskId);
+  try {
+    const findTask = await tasksServices.findTaskbyId(taskId);
 
-  if (!findTask || findTask.owner !== ownerId) {
-    return res.status(400).json({ message: "Invalid card id" });
+    if (!findTask || findTask.owner.valueOf() !== ownerId) {
+      return res.status(400).json({ message: "Invalid card id" });
+    }
+
+    await tasksServices.findAndDeleteTask(taskId);
+
+    return res.status(204).json({ message: "Deletion was successful" });
+  } catch (err) {
+    return res.status(400).json({message: "Something go wrong"})
   }
-
-  await tasksServices.findAndDeleteTask(taskId);
-
-  return res.sendStatus(204);
 };
 
 module.exports = {
