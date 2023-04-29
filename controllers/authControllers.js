@@ -10,7 +10,7 @@ const signToken = (id) =>
   });
 
 /**
- * Add new user (registration)
+ * post user/regiser (registration)
  */
 const signupUsers = catchAsync(async (req, res) => {
   const newUserData = {
@@ -32,6 +32,9 @@ const signupUsers = catchAsync(async (req, res) => {
   });
 });
 
+/**
+ * post user/login (loginization)
+ */
 const loginUsers = catchAsync(async (req, res, next) => {
   const user = req.body;
 

@@ -11,7 +11,7 @@ dotenv.config({ path: './.env' })
 const authsRouter = require('./routes/api/auth');
 const usersRouter = require('./routes/api/users');
 const columnsRouter = require('./routes/api/columns');
-const taskRouter = require("./routes/api/task");
+const tasksRouter = require("./routes/api/tasks");
 
 // initialize application
 const app = express();
@@ -37,12 +37,11 @@ app.use(express.json())
 // serv statics files
 app.use(express.static('public/avatars'))
 
-// app.use('/api/tasks', contactsRouter)
+// use all routes of project
 app.use('/auth', authsRouter)
 app.use('/user', usersRouter)
 app.use("/columns", columnsRouter)
-
-app.use('/task', taskRouter)
+app.use('/tasks', tasksRouter)
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
@@ -51,6 +50,7 @@ const options = {
     explorer: true
 };
 
+// use swagger docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
 app.use((req, res) => {

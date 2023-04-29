@@ -16,9 +16,9 @@ const getUsers = catchAsync(async(req, res) => {
 
 })
 
-
-
-
+/**
+ * post user/logout 
+ */
 const logOutUsers = catchAsync(async(req, res, next) => {
 
     const user = req.user;
@@ -35,19 +35,22 @@ const logOutUsers = catchAsync(async(req, res, next) => {
     });
 })
 
+/**
+ * get user/current 
+ */
 const currentUsers = catchAsync(async(req, res, next) => {
 
-    const Authorization = req.headers.authorization;
     const user = req.user;
     user.password = null;
 
     res.status(201).json({
         user,
-        Authorization,
     });
 })
 
-
+/**
+ * update user picture
+ */
 const updateUsersAvatars = catchAsync(async(req, res) => {
     const { file, user } = req;
 
@@ -57,8 +60,7 @@ const updateUsersAvatars = catchAsync(async(req, res) => {
 
     Object.keys(req.body).forEach((key) => {
         user[key] = req.body[key];
-        // user.name = req.body.name;
-        // user.birthyear = req.body.birthyear;
+
     });
 
     const updatedUser = await user.save();
@@ -68,14 +70,8 @@ const updateUsersAvatars = catchAsync(async(req, res) => {
     });
 });
 
-const getUser = (req, res) => {
-    res.status(200).json({
-        user: req.user,
-    });
-};
-
 /**
- * Update user data
+ * patch user/info
  */
 const updateUserData = async(req, res, next) => {
 
@@ -87,21 +83,18 @@ const updateUserData = async(req, res, next) => {
     });
 
     user.save();
-    // user.password = null;
+
     res.status(200).json({
         user: user,
     });
 
 }
 
-
-
 module.exports = {
     getUsers,
     logOutUsers,
     currentUsers,
     updateUsersAvatars,
-    getUser,
     updateUserData,
 
 }

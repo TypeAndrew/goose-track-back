@@ -1,6 +1,10 @@
 const { isValidObjectId } = require("mongoose");
 const tasksServices = require("../services/tasksService");
 
+/**
+ * Get all task list
+ * get tasks
+ */
 const getAllTasks = async (req, res) => {
   const userId = req.user.id;
   const tasks = await tasksServices.getAllTasks(userId);
@@ -24,6 +28,10 @@ const createTask = async (req, res) => {
   return res.status(201).json({ task });
 };
 
+/**
+ * Edit task
+ * patch tasks/:id
+ */
 const editTask = async (req, res) => {
   const ownerId = req.user.id;
   const taskId = req.params.taskId;
@@ -58,6 +66,10 @@ const editTask = async (req, res) => {
   return res.status(200).json({ task });
 };
 
+/**
+ * Delete task
+ * delete tasks/:id
+ */
 const deleteTask = async (req, res) => {
   const ownerId = req.user.id;
   const taskId = req.params.taskId;
