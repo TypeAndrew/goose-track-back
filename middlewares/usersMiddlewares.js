@@ -54,36 +54,6 @@ exports.checkUserData = catchAsync(async(req, res, next) => {
     next();
 });
 
-exports.checkMailToken = catchAsync(async(req, res, next) => {
-    // Check new user data.
-
-    const mailToken = req.query.token;
-    const user = await User.findOne({ verificationToken: mailToken }).select('+password');
-
-    console.log('' + mailToken);
-    if (!user) return next(new AppError(404, 'User not found'));
-
-    if (mailToken !== user.verificationToken) return next(new AppError(401, 'Not authorized'));
-
-    req.body = user;
-
-    console.log(user);
-    next();
-});
-
-/**
- * Check new user data.
- */
-exports.checkValidUserData = (req, res, next) => {
-    // Check new user data.
-    const { error, value } = validators.createUserValidator(req.body);
-
-    if (error) return next(new AppError(400, error.details[0].message));
-
-    req.body = value;
-
-    next();
-};
 
 /**
  * Check user id.

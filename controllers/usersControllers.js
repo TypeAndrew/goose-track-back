@@ -16,19 +16,7 @@ const getUsers = catchAsync(async(req, res) => {
 
 })
 
-const verificationMailUsers = catchAsync(async(req, res) => {
 
-    const editUserData = req.body;
-
-    editUserData.verificationToken = null;
-    editUserData.verify = true;
-    await editUserData.save();
-
-    res.status(200).json({
-        message: 'Verification successful'
-    }, );
-
-})
 
 
 const logOutUsers = catchAsync(async(req, res, next) => {
@@ -114,7 +102,6 @@ module.exports = {
     currentUsers,
     updateUsersAvatars,
     getUser,
-    verificationMailUsers,
     updateUserData,
 
 }
