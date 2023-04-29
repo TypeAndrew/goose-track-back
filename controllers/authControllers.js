@@ -1,9 +1,8 @@
 const jwt = require("jsonwebtoken");
 const { catchAsync } = require("../utils");
-const gravatar = require("gravatar");
+// const gravatar = require("gravatar");
 const User = require("../models/usersModel");
 const Column = require("../models/columnModel");
-const uuid = require("uuid").v4;
 
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -11,19 +10,16 @@ const signToken = (id) =>
   });
 
 /**
- * Add new user (registration)
+ * post user/regiser (registration)
  */
 const signupUsers = catchAsync(async (req, res) => {
   const newUserData = {
     ...req.body,
   };
-  newUserData.avatarURL = gravatar.url(newUserData.email);
-  console.log(newUserData);
-  newUserData.verificationToken = uuid();
+ // newUserData.avatarURL = gravatar.url(newUserData.email);
+
   const newUser = await User.create(newUserData);
 
-  console.log(newUser);
-  // next();
   await newUser.save();
 
   const token = signToken(newUser._id);
@@ -36,6 +32,9 @@ const signupUsers = catchAsync(async (req, res) => {
   });
 });
 
+/**
+ * post user/login (loginization)
+ */
 const loginUsers = catchAsync(async (req, res, next) => {
   const user = req.body;
 

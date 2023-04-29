@@ -14,6 +14,9 @@ const getColumns = catchAsync(async (req, res) => {
   });
 });
 
+/**
+ * New column create
+ */
 const createColumn = catchAsync(async (req, res) => {
   const { _id: owner } = req.user;
 
@@ -27,6 +30,10 @@ const createColumn = catchAsync(async (req, res) => {
   res.status(201).json(column);
 });
 
+
+/**
+ * delete column 
+ */
 const deleteColumn = catchAsync(async (req, res) => {
   const { id } = req.params;
   const { _id: owner } = req.user;

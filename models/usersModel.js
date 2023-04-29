@@ -9,6 +9,7 @@ const usersSchema = new Schema({
     name: {
         type: String,
         required: [true, 'Name is required'],
+        max: 16,
     },
     password: {
         type: String,
@@ -19,10 +20,10 @@ const usersSchema = new Schema({
         required: [true, 'Email is required'],
         unique: true,
     },
-    subscription: {
+    status: {
         type: String,
-        enum: ["starter", "pro", "business"],
-        default: "starter"
+        enum: ["user", "admin"],
+        default: "user"
     },
     birthday: {
         type: String,
@@ -32,8 +33,9 @@ const usersSchema = new Schema({
         type: String,
         default: ""
     },
-    telegram: {
+    skype: {
         type: String,
+        max: 12,
         default: ""
     },
     token: {
@@ -44,14 +46,6 @@ const usersSchema = new Schema({
     avatarURL: {
         type: String,
         default: null,
-    },
-    verify: {
-        type: Boolean,
-        default: false,
-    },
-    verificationToken: {
-        type: String,
-
     },
     countLogin: {
         type: Number,

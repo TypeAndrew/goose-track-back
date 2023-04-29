@@ -20,9 +20,6 @@ const Task = model(
       enum: ["To do", "In progress", "Done"],
       default: "To do",
     },
-    
-    
-   
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
