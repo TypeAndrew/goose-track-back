@@ -15,6 +15,7 @@ router.get('/current', usersMiddlewares.checkTokensData);
 router.get('/current', usersControllers.currentUsers);
 
 router.patch('/info', usersMiddlewares.checkTokensData);
+router.patch('/info', usersMiddlewares.uploadUserPhoto);
 router.patch('/info', usersControllers.updateUserData);
 
 router.patch('/avatars', usersMiddlewares.checkTokensData);
