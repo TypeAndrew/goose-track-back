@@ -77,9 +77,13 @@ const updateUserData = async(req, res, next) => {
 
     const {  user } = req;
     
-    Object.keys(req.body).forEach((key) => {
-        user[key] = req.body[key];
 
+
+    Object.keys(req.body).forEach((key) => {
+        
+        if  (key !== "avatarURL") { 
+            user[key] = req.body[key];
+        }
     });
 
     user.save();
