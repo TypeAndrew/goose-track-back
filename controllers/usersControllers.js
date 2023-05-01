@@ -75,7 +75,11 @@ const updateUsersAvatars = catchAsync(async(req, res) => {
  */
 const updateUserData = async(req, res, next) => {
 
-    const user = req.user;
+    const { avatarURL, user } = req;
+    
+     if (avatarURL) {
+        user.avatarURL = await ImageService.save(avatarURL, { width: 600, height: 600 }, 'images', 'users', user.id);
+    }
 
     Object.keys(req.body).forEach((key) => {
         user[key] = req.body[key];
