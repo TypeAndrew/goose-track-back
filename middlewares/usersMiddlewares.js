@@ -83,6 +83,6 @@ exports.checkUserData = catchAsync(async(req, res, next) => {
         // catch any unpredictable errors
         next(err);
     }
-}; */
+}; *///
 
 exports.uploadUserPhoto = ImageService.upload('avatarURL');
