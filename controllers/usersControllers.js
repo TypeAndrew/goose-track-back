@@ -59,7 +59,10 @@ const updateUsersAvatars = catchAsync(async(req, res) => {
     }
 
     Object.keys(req.body).forEach((key) => {
-        user[key] = req.body[key];
+
+        if (key === "avatarURL") {
+            user[key] = user[key] === "" ? `https://goose-track-back.onrender.com/${req.body[key]}` : user[key];
+        }
 
     });
 
@@ -75,13 +78,13 @@ const updateUsersAvatars = catchAsync(async(req, res) => {
  */
 const updateUserData = async(req, res, next) => {
 
-    const {  user } = req;
-    
+    const { user } = req;
+
 
 
     Object.keys(req.body).forEach((key) => {
-        
-        if  (key !== "avatarURL") { 
+
+        if (key !== "avatarURL") {
             user[key] = req.body[key];
         }
     });
