@@ -55,34 +55,4 @@ exports.checkUserData = catchAsync(async(req, res, next) => {
 });
 
 
-/**
- * Check user id.
- */
-/* exports.checkUserId = async(req, res, next) => {
-    try {
-        const { UserId } = req.params;
-
-        const user = ObjectId.isValid(UserId) ? await user.findById({ _id: UserId }) : undefined;
-
-        if (user) {
-
-            req.body = user;
-
-            next();
-        } else {
-            // if no contact with that id, sent 'not found' request
-            const error = new Error(`Contact with ${UserId} Not found`);
-
-            error.status = 404;
-
-            next(error);
-
-        }
-    } catch (err) {
-        console.log(err);
-        // catch any unpredictable errors
-        next(err);
-    }
-}; */
-
 exports.uploadUserPhoto = ImageService.upload('avatarURL');

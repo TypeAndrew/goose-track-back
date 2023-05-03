@@ -1,9 +1,5 @@
 const { model, Schema } = require('mongoose');
 const bcrypt = require('bcrypt');
-const crypto = require('crypto');
-// const { date } = require('joi');
-
-
 
 const usersSchema = new Schema({
     name: {
@@ -60,8 +56,7 @@ usersSchema.pre('save', async function(next) {
 
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-    // const passwordIsValid = await bcrypt.compare('Pass&2234', hashedPassword);
-    // this.avatarURL = this.avatarURL === "" ? `https://goose-track-back.onrender.com/${this.avatarURL}` : this.avatarURL;
+  
     next();
 });
 

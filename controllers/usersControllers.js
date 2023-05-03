@@ -58,10 +58,6 @@ const updateUsersAvatars = catchAsync(async(req, res) => {
         user.avatarURL = await ImageService.save(file, { width: 600, height: 600 }, 'images', 'users', user.id);
     }
 
-
-    //user["avatarURL"] = user["avatarURL"].substr(0, 5) === "image" ? `https://goose-track-back.onrender.com/${user["avatarURL"]}` : user["avatarURL"];
-
-
     const updatedUser = await user.save();
 
     res.status(200).json({

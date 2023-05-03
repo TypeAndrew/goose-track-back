@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const { catchAsync } = require("../utils");
-// const gravatar = require("gravatar");
 const User = require("../models/usersModel");
 const Column = require("../models/columnModel");
 
@@ -40,7 +39,6 @@ const loginUsers = catchAsync(async (req, res, next) => {
 
   const token = user.token === null ? signToken(user._id) : user.token;
 
-  // const updatedUser = await User.findByIdAndUpdate(user._id, { token }, { new: true });
   user.token = token;
 
   if (Number(user.countLogin) === 0) {
