@@ -1,61 +1,1129 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
-    "version": "1.0.0",
-    "title": "API Documentation",
-    "description": "Documentation for API endpoints"
+    "title": "GooseTrack",
+    "version": "1.0.0"
   },
+  "servers": [
+    {
+      "url": "https://goose-track-back.onrender.com",
+      "description": "Documentation for API endpoints"
+    }
+  ],
   "paths": {
-    "/users": {
-      "get": {
-        "summary": "Get all users",
+    "/auth/register": {
+      "post": {
+        "summary": "Register new user",
+        "tags": ["Auth"],
+        "operationId": "register",
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "$ref": "#/components/schemas/User/properties/name"
+                  },
+                  "email": {
+                    "$ref": "#/components/schemas/User/properties/email"
+                  },
+                  "password": {
+                    "$ref": "#/components/schemas/User/properties/password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Registration completed successfully"
+                    },
+                    "dataUser": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "$ref": "#/components/schemas/User/properties/name"
+                        },
+                        "status": {
+                          "$ref": "#/components/schemas/User/properties/status"
+                     
+                        },
+                        "email": {
+                          "$ref": "#/components/schemas/User/properties/email"
+                        },
+                        "birthday": {
+                          "$ref": "#/components/schemas/User/properties/birthday"
+                        },
+                        "phone": {
+                          "$ref": "#/components/schemas/User/properties/phone"
+                        },
+                        "skype": {
+                          "$ref": "#/components/schemas/User/properties/skype"
+                        },
+                        "avatarURL": {
+                          "$ref": "#/components/schemas/User/properties/avatarURL"
+                        },
+                        "token": {
+                          "$ref": "#/components/schemas/User/properties/token"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["message"],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Some error message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["message"],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Email in use"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ServerError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login user",
+        "tags": ["Auth"],
+        "operationId": "login",
+        "requestBody": {
+          "description": "Login data object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "$ref": "#/components/schemas/User/properties/email"
+                  },
+                  "password": {
+                    "$ref": "#/components/schemas/User/properties/password"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Login completed successfully"
+                    },
+                    "dataUser": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "$ref": "#/components/schemas/User/properties/name"
+                        },
+                        "status": {
+                          "$ref": "#/components/schemas/User/properties/status"
+                     
+                        },
+                        "email": {
+                          "$ref": "#/components/schemas/User/properties/email"
+                        },
+                        "birthday": {
+                          "$ref": "#/components/schemas/User/properties/birthday"
+                        },
+                        "phone": {
+                          "$ref": "#/components/schemas/User/properties/phone"
+                        },
+                        "skype": {
+                          "$ref": "#/components/schemas/User/properties/skype"
+                        },
+                        "avatarURL": {
+                          "$ref": "#/components/schemas/User/properties/avatarURL"
+                        },
+                        "token": {
+                          "$ref": "#/components/schemas/User/properties/token"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["message"],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Some error message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["message"],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Email or password is wrong"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ServerError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    
+    "/users/logout": {
+      "post": {
+        "summary": "Logout user",
+        "tags": ["Auth"],
+        "operationId": "logout",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "The token issued to the current user",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["message"],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Logout completed successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["message"],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ServerError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/current": {
+      "get": {
+        "summary": "Get info about current user",
+        "tags": ["User"],
+        "operationId": "getUserInfo",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "The token issued to the current user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Success"
+                    },
+                    "dataUser": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "$ref": "#/components/schemas/User/properties/name"
+                        },
+                        "status": {
+                          "$ref": "#/components/schemas/User/properties/status"
+                     
+                        },
+                        "email": {
+                          "$ref": "#/components/schemas/User/properties/email"
+                        },
+                        "birthday": {
+                          "$ref": "#/components/schemas/User/properties/birthday"
+                        },
+                        "phone": {
+                          "$ref": "#/components/schemas/User/properties/phone"
+                        },
+                        "skype": {
+                          "$ref": "#/components/schemas/User/properties/skype"
+                        },
+                        "avatarURL": {
+                          "$ref": "#/components/schemas/User/properties/avatarURL"
+                        },
+                        "token": {
+                          "$ref": "#/components/schemas/User/properties/token"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["message"],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Email or password is wrong"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ServerError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/info": {
+      "patch": {
+        "summary": "Update user data",
+        "tags": ["User"],
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "The token issued to the current user",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Data object that needs to be added to update",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "skype": {
+                    "$ref": "#/components/schemas/User/properties/skype"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["message", "user"],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Updated successfully"
+                    },
+                    "updatedData": {
+                      "type": "object",
+                      "properties": {
+                        "skype": {
+                          "$ref": "#/components/schemas/User/properties/skype"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["message"],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Some error message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["message"],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/NotFoundError" }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ServerError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks": {
+      "get": {
+        "summary": "Get tasks collection for a month",
+        "tags": ["Task"],
+        "operationId": "getAllTasks",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Successfully"
+                    },
+                    "tasks": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Task"
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["message"],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Choose another type of language. Available options: ua, en."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["message"],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ServerError" }
               }
             }
           }
         }
       },
       "post": {
-        "summary": "Create a new user",
+        "summary": "Create new task",
+        "tags": ["Task"],
+        "operationId": "addTask",
+        "requestBody": {
+          "description": "The new task object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "en": {
+                      "$ref": "#/components/schemas/Task/properties/title/properties/en"
+                    }
+                  },
+                  "start": {
+                    "$ref": "#/components/schemas/Task/properties/start"
+                  },
+                  "end": { "$ref": "#/components/schemas/Task/properties/end" },
+                  "date": {
+                    "$ref": "#/components/schemas/Task/properties/date"
+                  },
+                  "status": {
+                    "$ref": "#/components/schemas/Task/properties/status"
+                  },
+                  "priority": {
+                    "$ref": "#/components/schemas/Task/properties/priority"
+                  }
+                }
+              }
+            }
+          }
+        },
         "parameters": [
           {
-            "name": "user",
-            "in": "body",
-            "description": "User object",
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "The token issued to the current user",
             "schema": {
-              "$ref": "#/definitions/User"
+              "type": "string"
             }
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created",
-            "schema": {
-              "$ref": "#/definitions/User"
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Successfully"
+                    },
+                    "taskData": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "en": {
+                            "$ref": "#/components/schemas/Task/properties/title/properties/en"
+                          }
+                        },
+                        "start": {
+                          "$ref": "#/components/schemas/Task/properties/start"
+                        },
+                        "end": {
+                          "$ref": "#/components/schemas/Task/properties/end"
+                        },
+                        "date": {
+                          "$ref": "#/components/schemas/Task/properties/date"
+                        },
+                        "status": {
+                          "$ref": "#/components/schemas/Task/properties/status"
+                        },
+                        "priority": {
+                          "$ref": "#/components/schemas/Task/properties/priority"
+                        },
+                        "owner": {
+                          "$ref": "#/components/schemas/Task/properties/owner"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["message"],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["message"],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Server Error"
+                    }
+                  }
+                }
+              }
             }
           }
         }
       }
-    }
-  },
-  "definitions": {
-    "User": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "name": {
-          "type": "string"
+    },
+    "/tasks/{taskId}": {
+      "patch": {
+        "summary": "Update the task",
+        "tags": ["Task"],
+        "operationId": "updateTasks",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "The token issued to the current user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "description": "Task ID",
+            "schema": {
+              "type": "string"
+            },
+            "example": "6438255d9ef48a24e5d81693"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Successfully"
+                    },
+                    "taskData": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "en": {
+                            "$ref": "#/components/schemas/Task/properties/title/properties/en"
+                          }
+                        },
+                        "start": {
+                          "$ref": "#/components/schemas/Task/properties/start"
+                        },
+                        "end": {
+                          "$ref": "#/components/schemas/Task/properties/end"
+                        },
+                        "date": {
+                          "$ref": "#/components/schemas/Task/properties/date"
+                        },
+                        "status": {
+                          "$ref": "#/components/schemas/Task/properties/status"
+                        },
+                        "priority": {
+                          "$ref": "#/components/schemas/Task/properties/priority"
+                        },
+                        "owner": {
+                          "$ref": "#/components/schemas/Task/properties/owner"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["message"],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["message"],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Task not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ServerError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete task by ID",
+        "tags": ["Task"],
+        "operationId": "deleteTasks",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "The token issued to the current user",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "taskId",
+            "in": "path",
+            "required": true,
+            "description": "Notice ID",
+            "schema": {
+              "type": "string"
+            },
+            "example": "6438255d9ef48a24e5d81693"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Successfully"
+                    },
+                    "taskDeleted": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "en": {
+                            "$ref": "#/components/schemas/Task/properties/title/properties/en"
+                          }
+                        },
+                        "start": {
+                          "$ref": "#/components/schemas/Task/properties/start"
+                        },
+                        "end": {
+                          "$ref": "#/components/schemas/Task/properties/end"
+                        },
+                        "date": {
+                          "$ref": "#/components/schemas/Task/properties/date"
+                        },
+                        "status": {
+                          "$ref": "#/components/schemas/Task/properties/status"
+                        },
+                        "priority": {
+                          "$ref": "#/components/schemas/Task/properties/priority"
+                        },
+                        "owner": {
+                          "$ref": "#/components/schemas/Task/properties/owner"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["message"],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["message"],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Task not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ServerError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "642fdf8745bc73b2aecbae7b",
+            "description": "Backend-generated unique identifier."
+          },
+          "name": {
+            "type": "string",
+            "example": "Ivan Petrenko",
+            "description": "User's name"
+          },
+          "status": {
+            "type": "String",
+             "enum": ["user", "admin"],
+             "description": "user status"
+          },
+          "email": {
+            "type": "string",
+            "example": "ivan_petrenko@mail.com",
+            "description": "User's email address"
+          },
+          "password": {
+            "type": "string",
+            "example": "ivan123456petrenko",
+            "description": "User's password. At least 6 characters"
+          },
+          "skype": {
+            "type": "string",
+            "example": "live:.cid.6654401b9e97jdaa",
+            "default": null,
+            "description": "User's skype login"
+          },
+          "phone": {
+            "type": "string",
+            "example": "066-555-44-33",
+            "default": null,
+            "description": "User's phone number"
+          },
+          "birthday": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-04-12T07:28:49.493Z",
+            "default": null,
+            "description": "User's day of birth"
+          },
+          "avatarURL": {
+            "type": "string",
+            "example": "https://s.gravatar.com/avatar/93e9084ab289b7f1f5e4ab6716a56c3b?s=100&r=x&d=retro",
+            "description": "User's avatar"
+          },
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0MzA0Yzg0YmQxNjgwMzBkOTIyMDQ3YyIsImlhdCI6MTY4MDk0NTI5NSwiZXhwIjoxNjgxMDMxNjk1fQ.mqGKd15X-SXUafsR9tFw2BucuG9bmINW_rac35ETj4s",
+            "default": null,
+            "description": "User's personal token to access site resources. Created by backend after user's authorization"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-04-12T07:28:49.493Z",
+            "description": "Backend-generated date and time of creating user's data"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-04-12T07:28:49.493Z",
+            "description": "Backend-generated date and time of updating user's data"
+          }
+        }
+      },
+      "Task": {
+        "type": "object",
+        "required": [
+          "title",
+          "start",
+          "end",
+          "date",
+          "status",
+          "priority",
+          "owner"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "642fdf8745bc73b2aecbae7b",
+            "description": "Backend-generated unique identifier."
+          },
+          "title": {
+            "type": "object",
+            "properties": {
+              "en": {
+                "type": "string",
+                "description": "Task title in English",
+                "example": "Drink coffee"
+              },
+              "ua": {
+                "type": "string",
+                "description": "Task title in Ukrainian",
+                "example": "Випити кави"
+              }
+            }
+          },
+          "start": {
+            "type": "string",
+            "format": "time",
+            "example": "07:28",
+            "description": "Tasks start"
+          },
+          "end": {
+            "type": "string",
+            "format": "time",
+            "example": "07:28",
+            "description": "Tasks end"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "example": "2023-04-12",
+            "description": "Time of task start"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["todo", "inprogress", "done"],
+            "default": "todo",
+            "description": "Task status"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["low", "medium", "high"],
+            "default": "low",
+            "description": "Task priority"
+          },
+          "owner": {
+            "type": "string",
+            "example": "642fdf8745bc73b2aecbae7b",
+            "description": "Owner's unique identifier."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-04-12T07:28:49.493Z",
+            "description": "Backend-generated date and time of task creating"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-04-12T07:28:49.493Z",
+            "description": "Backend-generated date and time of task updating"
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Internal Server Error",
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "type": "string",
+            "default": "Server Error"
+          }
+        }
+      },
+      "NotFoundError": {
+        "description": "Not Found",
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "type": "string",
+            "default": "Not found"
+          }
         }
       }
     }
+  }
   }
 }
