@@ -46,7 +46,11 @@ const usersSchema = new Schema({
     countLogin: {
         type: Number,
         default: 0,
-    }
+    },
+    columns: {
+        type: Array,
+        default: [{ id: 1, name: "To do" }, { id: 2, name: "In progress" },{id: 3, name: "Done" }],
+    },    
 })
 
 // Pre save hook
