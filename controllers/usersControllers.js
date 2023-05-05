@@ -94,23 +94,24 @@ const sortColumnsUser = async(req, res, next) => {
     const { name } = req.body;
     const { user  } = req;
     const columnsBar = user.columns;
-    const names = columnsBar.map(el => el.name);
-    const Index1 = names.indexOf("To do");
+   // const names = columnsBar.map(el => el);
+    const Index1 = columnsBar.indexOf("To do");
     const Index2 = Index1 + 1;
     
     
     
-    const valueFirst = columnsBar[Index1].id;
-    const valueSecond = columnsBar[Index2].id ;
-    columnsBar[Index1].id = valueSecond;
-    if (columnsBar.length > Index2) { 
-        columnsBar[Index2].id = valueFirst;
+    const valueFirst = columnsBar[Index1];
+    const valueSecond = columnsBar[Index2] ;
+    
+    if (columnsBar.length > Index2) {
+        columnsBar[Index1] = valueSecond;
+        columnsBar[Index2] = valueFirst;
     }
     console.log(name)
 
     console.log(columnsBar)
 
-
+    user.columns = columnsBar;
     
     user.save();
 
