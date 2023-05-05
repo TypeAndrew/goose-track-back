@@ -22,4 +22,7 @@ router.patch('/avatars', usersMiddlewares.checkTokensData);
 router.patch('/avatars', usersMiddlewares.uploadUserPhoto);
 router.patch('/avatars', usersControllers.updateUsersAvatars);
 
+router.post('/sort', usersMiddlewares.checkTokensData);
+router.post('/sort', usersControllers.sortColumnsUser);
+
 module.exports = router
